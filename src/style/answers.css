@@ -1,0 +1,13 @@
+.answer:hover{
+    transform: scale(1.02);
+}
+
+.answer.correct {
+  background: #2ecc71;
+  color: white;
+}
+
+.answer.wrong {
+  background: #e74c3c;
+  color: white;
+}
