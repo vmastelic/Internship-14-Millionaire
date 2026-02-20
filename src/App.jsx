@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import './style/App.css'
 import { QUESTIONS } from './data/questions'
+import LevelList from './components/LevelList'
 import './style/answers.css'
+import './style/App.css'
 
 
 function randomQuestions(questions){
@@ -16,11 +17,16 @@ function App() {
   const [reveal, setReveal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
+  const[skipUsed, setSkip] = useState(false);
+
   const gameQuestions = useMemo(() => randomQuestions(QUESTIONS), [status]);
 
   const startGame = () => {
     setCurrentIndex(0);
+    setSelectedId(null);
+    setReveal(false);
     setStatus("playing");
+    setSkip(false);
   }
 
   const playAgain = () => {
@@ -44,16 +50,18 @@ function App() {
       </>
     );
   }
-
+  
   if (status === "winner") {
     return (
       <>
         <h1>Pobjeda!</h1>
-        <button onClick={startGame}>Igraj ponovo</button>
+        <button onClick={playAgain}>Igraj ponovo</button>
       </>
     );
   }
   
+  const currentQuestion = gameQuestions[currentIndex];
+
   const handleAnswer = (answer) => {
     const isCorrect = answer.correct;
     if(reveal)return;
@@ -77,10 +85,8 @@ function App() {
       }else{
         setStatus("finished");
       }
-    }, 1200);
+    }, 600);
   };
-
-  const currentQuestion = gameQuestions[currentIndex];
 
   const getAnswerClass = (a) => {
     if(!reveal) return "answer"
@@ -89,8 +95,21 @@ function App() {
     return "answer";
   }
 
+  const handleSkip = () => {
+    if(skipUsed || reveal) return;
+    setCurrentIndex((prev) => prev + 1);
+    
+    if(currentIndex === gameQuestions.length - 1){
+      setStatus("winner");
+      return;
+    }
+    setSkip(true);
+    
+  }
+  
   return(
-    <div>
+    <div className='page'>
+      <div className='game-questions'>
         <h2>{currentIndex + 1}. {currentQuestion.text}</h2>
         {currentQuestion.answers.map((a) => (
           <button
@@ -100,6 +119,22 @@ function App() {
             disabled={reveal}
           >{a.text}</button>
         ))}
+
+        <div className='jokers'>
+          <button onClick={() => handleHalf}>50:50</button>
+          <button 
+          onClick={handleSkip}
+          disabled={skipUsed}
+          >
+            skip</button>
+        </div>
+
+      </div>
+
+      <div className='level-list'>
+        <LevelList currentLevel={currentIndex+1}/>
+      </div>
+
     </div>
   );
 }
