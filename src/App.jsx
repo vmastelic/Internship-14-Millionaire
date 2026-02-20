@@ -19,15 +19,61 @@ function App() {
     setStatus("playing");
   }
 
+  const playAgain = () => {
+    setStatus("start");
+  }
+  
   if(status === "start"){
     return(
       <>
-        <h1>Dobrodošli u (polu)milijunaš</h1>
+        <h1>Tko želi biti (polu)milijunaš?</h1>
         <button onClick={startGame}>Start game</button>
       </>
     );
   }
+  
+  if (status === "finished") {
+      return (
+        <>
+          <h1>Kraj igre</h1>
+          <button onClick={playAgain}>Natrag na start</button>
+        </>
+      );
+    }
 
+  const handleAnswer = (answer) => {
+    const isCorrect = answer.correct;
+
+    setTimeout(() => {
+      if(isCorrect){
+        if(currentIndex === gameQuestions.length - 1){
+          setStatus("winner");
+        }else{
+          console.log("correct");
+          setCurrentIndex((prev) => prev + 1);
+          return(
+            <>
+            <h3>Tocan odgovor</h3>
+            </>
+          );
+        }
+      }else{
+        console.log("wrong")
+        setStatus("finished");
+      }
+    }, 1000);
+  };
+
+  const currentQuestion = gameQuestions[currentIndex];
+
+  return(
+    <div>
+        <h2>{currentIndex + 1}. {currentQuestion.text}</h2>
+        {currentQuestion.answers.map((a) => (
+          <button key={a.id} onClick={() => handleAnswer(a)}>{a.text}</button>
+        ))}
+    </div>
+  );
 }
 
 export default App
