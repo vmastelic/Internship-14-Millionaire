@@ -1,5 +1,5 @@
 button:hover{
-    transform: scale(1.06);
+    transform: scale(1.04);
 }
 
 .answer.correct {
@@ -10,4 +10,16 @@ button:hover{
 .answer.wrong {
   background: #e74c3c;
   color: white;
+}
+
+.answers{
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.jokers{
+  display: flex;
+  margin: 10px;
+  gap: 10px;
 }

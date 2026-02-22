@@ -137,7 +137,7 @@ function App() {
     <div className='page'>
       <div className='game-questions'>
         <h2>{currentIndex + 1}. {currentQuestion.text}</h2>
-
+        <div className='answers'>
         {currentQuestion.answers.map((a) => {
           if (hiddenAnswerIds.includes(a.id)) return null;
           return (
@@ -151,6 +151,7 @@ function App() {
             </button>
           );
         })}
+        </div>
 
         <div className='jokers'>
           <button 
