@@ -3,6 +3,7 @@ import { QUESTIONS } from './data/questions'
 import LevelList from './components/LevelList'
 import './style/answers.css'
 import './style/App.css'
+import { LEVELS } from './data/levels'
 
 
 function randomQuestions(questions){
@@ -21,6 +22,8 @@ function App() {
   const[halfUsed, setHalf] = useState(false);
   const [hiddenAnswerIds, setHiddenAnswerIds] = useState([]);
 
+  const[prize, setPrize] = useState(0);
+
   const gameQuestions = useMemo(() => randomQuestions(QUESTIONS), [status]);
 
   const startGame = () => {
@@ -31,6 +34,7 @@ function App() {
     setSkip(false);
     setHalf(false);
     setHiddenAnswerIds([]);
+    setPrize(0);
   }
 
   const playAgain = () => {
@@ -51,6 +55,7 @@ function App() {
       <>
         <h1>Kraj igre</h1>
         <button onClick={playAgain}>Natrag na start</button>
+        <h3>Osvojili ste {prize}€.</h3>
       </>
     );
   }
@@ -60,6 +65,7 @@ function App() {
       <>
         <h1>Pobjeda!</h1>
         <button onClick={playAgain}>Igraj ponovo</button>
+        <h2>Čestitamo, osvojili ste {LEVELS[currentIndex].prize}€!</h2>
       </>
     );
   }
@@ -79,8 +85,10 @@ function App() {
 
         if(currentIndex === gameQuestions.length - 1){
           setStatus("winner");
-
         }else{
+          if(currentIndex === 4){
+            setPrize(LEVELS[currentIndex].prize);
+          }
           setCurrentIndex((prev) => prev + 1);
           setSelectedId(null);
           setReveal(false);

@@ -1,5 +1,5 @@
-.answer:hover{
-    transform: scale(1.02);
+button:hover{
+    transform: scale(1.06);
 }
 
 .answer.correct {
