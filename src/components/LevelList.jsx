@@ -8,7 +8,7 @@ const LevelList = ({currentLevel}) => {
                      <h3
                      key={lev.level}
                      style={{
-                        background: lev.level === currentLevel ? "gray" : "transparent",
+                        background: lev.level === currentLevel ? "green" : "transparent",
                         color: lev.safe ? "yellow" : "white",
                         borderRadius: '10px',
                     }}

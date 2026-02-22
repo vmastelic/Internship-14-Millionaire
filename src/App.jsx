@@ -98,7 +98,7 @@ function App() {
       }else{
         setStatus("finished");
       }
-    }, 600);
+    }, 800);
   };
 
   const getAnswerClass = (a) => {

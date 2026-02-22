@@ -1,5 +1,6 @@
 button:hover{
     transform: scale(1.04);
+    background-color: #1d5124;
 }
 
 .answer.correct {
@@ -12,10 +13,18 @@ button:hover{
   color: white;
 }
 
+.game-questions{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .answers{
   display: flex;
-  gap: 5px;
+  gap: 10px;
   flex-direction: column;
+  width: 400px;
 }
 
 .jokers{
