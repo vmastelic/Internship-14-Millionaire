@@ -18,6 +18,8 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
 
   const[skipUsed, setSkip] = useState(false);
+  const[halfUsed, setHalf] = useState(false);
+  const [hiddenAnswerIds, setHiddenAnswerIds] = useState([]);
 
   const gameQuestions = useMemo(() => randomQuestions(QUESTIONS), [status]);
 
@@ -27,6 +29,8 @@ function App() {
     setReveal(false);
     setStatus("playing");
     setSkip(false);
+    setHalf(false);
+    setHiddenAnswerIds([]);
   }
 
   const playAgain = () => {
@@ -80,6 +84,7 @@ function App() {
           setCurrentIndex((prev) => prev + 1);
           setSelectedId(null);
           setReveal(false);
+          setHiddenAnswerIds([]);
         }
 
       }else{
@@ -104,24 +109,46 @@ function App() {
       return;
     }
     setSkip(true);
-    
   }
+
+  const handleHalf = (question) => {
+    if (halfUsed || reveal) return;
+    
+    const wrongAnswers = question.answers.filter((a) => !a.correct);
+    
+    const toHide = [...wrongAnswers]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 2)
+      .map((a) => a.id);
+    
+    setHiddenAnswerIds(toHide);
+    setHalf(true);
+  };
   
   return(
     <div className='page'>
       <div className='game-questions'>
         <h2>{currentIndex + 1}. {currentQuestion.text}</h2>
-        {currentQuestion.answers.map((a) => (
-          <button
-            key={a.id}
-            className={getAnswerClass(a)}
-            onClick={() => handleAnswer(a)}
-            disabled={reveal}
-          >{a.text}</button>
-        ))}
+
+        {currentQuestion.answers.map((a) => {
+          if (hiddenAnswerIds.includes(a.id)) return null;
+          return (
+            <button
+              key={a.id}
+              className={getAnswerClass(a)}
+              onClick={() => handleAnswer(a)}
+              disabled={reveal}
+              >
+              {a.text}
+            </button>
+          );
+        })}
 
         <div className='jokers'>
-          <button onClick={() => handleHalf}>50:50</button>
+          <button 
+          onClick={() => handleHalf(currentQuestion)}
+          disabled={halfUsed}
+          >50:50</button>
           <button 
           onClick={handleSkip}
           disabled={skipUsed}
